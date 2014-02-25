@@ -17,14 +17,11 @@ $(document).ready(function() {
 	  	function(data) {
 	  		console.log(data);
 	  		for (var i = 0; i < data.query.results.result.num_results; i++) {
-	  			
-		  			for (var j = 0; j < data.query.results.result.matches[i].players.length; j++) {
-		  				if (data.query.results.result.matches[i].players[j].account_id == dota_account) {
-			    			results.innerHTML += data.query.results.result.matches[i].players[j].hero_id + "<br />";
-                            played.push(data.query.results.result.matches[i].players[j].hero_id);
-			    		}
+		  		for (var j = 0; j < data.query.results.result.matches[i].players.length; j++) {
+		  			if (data.query.results.result.matches[i].players[j].account_id == dota_account) {
+                        played.push(data.query.results.result.matches[i].players[j].hero_id);
 			    	}
-		    	
+			    }
 			}
             if (data.query.results.result.matches.length == 100) {
                 last_match_id = data.query.results.result.matches[99].match_id;
@@ -39,30 +36,25 @@ $(document).ready(function() {
 	      	function(data) {
                 console.log(data);
                 for (var i = 0; i < data.query.results.result.num_results; i++) {
-                    
-                        for (var j = 0; j < data.query.results.result.matches[i].players.length; j++) {
-                            if (data.query.results.result.matches[i].players[j].account_id == dota_account) {
-                                results.innerHTML += data.query.results.result.matches[i].players[j].hero_id + "<br />";
-                                played.push(data.query.results.result.matches[i].players[j].hero_id);
-                            }
+                    for (var j = 0; j < data.query.results.result.matches[i].players.length; j++) {
+                        if (data.query.results.result.matches[i].players[j].account_id == dota_account) {
+                            played.push(data.query.results.result.matches[i].players[j].hero_id);
                         }
-                    
+                    }
                 }
                 
-                played.sort(function(a,b){return a-b});
-                var uniquePlayed = [];
+                var uniquePlayed = getUniqueHeroes(played);
                 var found = false;
-                $.each(played, function(i, el){
-                    if($.inArray(el, uniquePlayed) === -1) uniquePlayed.push(el);
-                });
+                
                 for (var i = 0; i < heroes.heroes.length; i++) {
                     for (var j = 0; j < uniquePlayed.length; j++) {
                         if (heroes.heroes[i].id == uniquePlayed[j]) {
                             found = true;
+                            results.innerHTML += heroes.heroes[i].localized_name + "<br />";
                         }
                     }
                     if (found == false) {
-                        unplayed.innerHTML += heroes.heroes[i].name + "<br />";
+                        unplayed.innerHTML += heroes.heroes[i].localized_name + "<br />";
                     } else {
                         found = false;
                     }
